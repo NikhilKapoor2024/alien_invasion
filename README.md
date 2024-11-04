@@ -1,4 +1,4 @@
-# Project: Alien Invasion!
+# Project: Alien Invasion
 
 This is my first big project with **Python**.
 
