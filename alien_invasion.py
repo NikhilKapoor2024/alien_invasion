@@ -15,8 +15,7 @@ class AlienInvasion:
 
         # window attributes
         self.screen = pygame.display.set_mode(
-            size=(0, 0),
-            flags=pygame.FULLSCREEN)
+            size=(1280, 720))
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion!")
@@ -84,6 +83,9 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
                 if bullet.rect.bottom <= 0:
                     self.bullets.remove(bullet)
+        
+        # if bullets and aliens collide, kill both sprites
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
     
 
     def _create_fleet(self):
