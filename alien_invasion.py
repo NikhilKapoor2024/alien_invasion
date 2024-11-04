@@ -85,7 +85,7 @@ class AlienInvasion:
                     self.bullets.remove(bullet)
         
         # if bullets and aliens collide, kill both sprites
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, False, True)
     
 
     def _create_fleet(self):
