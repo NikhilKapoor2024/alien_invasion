@@ -61,6 +61,8 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self._check_mouse_events(event)
     
 
     def _check_keydown_events(self, event):
@@ -81,6 +83,24 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+    
+    
+    def _check_mouse_events(self, event):
+        """When the mouse button is pressed"""
+        mouse_pos = pygame.mouse.get_pos()
+        self._check_play_button(mouse_pos)
+    
+
+    def _check_play_button(self, mouse_pos):
+        """If play button is clicked, game starts (but only if the active flag is already false)"""
+        button_click = self.play_button.rect.collidepoint(mouse_pos)
+        if button_click and not self.stats.game_active:
+            self.stats.reset_stats()
+            self.stats.game_active = True
+            pygame.mouse.set_visible(False)
+
+            # empty out groups, recreate fleet, and move ship to center again
+            self._empty_reset()
     
 
     def _fire_bullet(self):
@@ -175,13 +195,11 @@ class AlienInvasion:
         """Handle when a ship gets hit"""
         if self.stats.ships_left > 0:
             self.stats.ships_left -= 1
-            self.aliens.empty()
-            self.bullets.empty()
-            self._create_fleet()
-            self.ship.center_ship()
+            self._empty_reset()
             sleep(0.5)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
     
     def _check_alien_bottom(self):
         """handles when alien fleet reaches bottom screen"""
@@ -191,6 +209,14 @@ class AlienInvasion:
                 print("Alien reached bottom!")
                 self._ship_hit()
                 break
+    
+
+    def _empty_reset(self):
+        """helper method for reset of elements"""
+        self.aliens.empty()
+        self.bullets.empty()
+        self._create_fleet()
+        self.ship.center_ship()
 
 
     def _update_screen(self):
